@@ -15,4 +15,8 @@ describe Oystercard do
   10.times { subject.top_up(8) }
   expect { subject.top_up(11) }.to raise_error error_message
   end
+  it 'deduct money from the card' do
+    subject.top_up(10)
+    expect(subject.deduct(5)).to eq 5.0
+  end
 end
