@@ -7,8 +7,8 @@ class Oystercard
 
   def top_up(money)
     error_message = "You cannot load more than #{MAX_BALANCE}"
-    raise error_message if balance + money.to_f >= MAX_BALANCE
-    @balance = balance + money.to_f
+    raise error_message if balance + money.to_f > MAX_BALANCE
+    @balance += money.to_f
   end
 
 end
