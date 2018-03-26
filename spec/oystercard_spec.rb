@@ -1,4 +1,6 @@
 require 'oystercard'
 describe Oystercard do
-  it { is_expected.to respond_to(:balance) }
+  it 'has a balance equal to 0 once created' do
+    expect(subject.balance).to eq 0
+  end
 end
