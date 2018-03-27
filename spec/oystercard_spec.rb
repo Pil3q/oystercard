@@ -9,7 +9,7 @@ describe Oystercard do
     expect(subject.balance).to eq 5.5
   end
 
-  error_message = "You cannot load more than #{Oystercard::MAX_BALANCE}"
+  error_message = "You cannot load more than £#{Oystercard::MAX_BALANCE}"
 
   it 'raises an error when top up limit reached with big single top up' do
     expect { subject.top_up(91) }.to raise_error error_message
@@ -27,13 +27,20 @@ describe Oystercard do
   end
 
   it 'is in journey once touch in' do
+    subject.top_up(10)
     subject.touch_in
     expect(subject.in_journey).to eq true
   end
 
   it 'is not in journey once touch out' do
+    subject.top_up(10)
     subject.touch_in
     subject.touch_out
     expect(subject.in_journey).to eq false
+  end
+
+  it 'raise an error while there is no £ card while touch in' do
+    error_message = "You are broken, not even a £#{Oystercard::MINIMUM_FARE} left"
+    expect { subject.touch_in }.to raise_error error_message
   end
 end

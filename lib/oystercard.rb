@@ -1,6 +1,7 @@
 # Oystercard!
 class Oystercard
   MAX_BALANCE = 90.0
+  MINIMUM_FARE = 1.0
   attr_reader :balance, :in_journey
   def initialize
     @balance = 0
@@ -8,7 +9,7 @@ class Oystercard
   end
 
   def top_up(money)
-    error_message = "You cannot load more than #{MAX_BALANCE}"
+    error_message = "You cannot load more than £#{MAX_BALANCE}"
     raise error_message if balance + money.to_f > MAX_BALANCE
     @balance += money.to_f
   end
@@ -18,6 +19,8 @@ class Oystercard
   end
 
   def touch_in
+    error_message = "You are broken, not even a £#{MINIMUM_FARE} left"
+    raise error_message if balance < MINIMUM_FARE
     @in_journey = true
   end
 
