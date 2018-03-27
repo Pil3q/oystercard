@@ -23,6 +23,7 @@ describe Oystercard do
 end
 describe Oystercard do
   subject(:oystercard)  { described_class.new }
+  # Not relevant anymore as deduct became private method
   # it 'deduct money from the card' do
   #   oystercard.top_up(10)
   #   expect(oystercard.deduct(5)).to eq 5.0
@@ -32,23 +33,30 @@ describe 'need to up before' do
   oystercard.top_up(5)
   end
   it 'is in journey once touch in' do
-    oystercard.touch_in
-    expect(oystercard.in_journey).to eq true
+    station = double(:station)
+    oystercard.touch_in(station)
+    expect(oystercard.in_journey?).to eq true
   end
 
   it 'is not in journey once touch out' do
-    oystercard.touch_in
+    station = double(:station)
+    oystercard.touch_in(station)
     oystercard.touch_out
-    expect(subject.in_journey).to eq false
+    expect(subject.in_journey?).to eq false
   end
   it 'charger minimum fare while touch out' do
     expect{ oystercard.touch_out }.to change{ oystercard.balance }.by -Oystercard::MINIMUM_FARE
   end
+  it "should remember touch in station" do
+    station = double(:station)
+    oystercard.touch_in(station)
+    expect(oystercard.entry_station).to eq station
+  end
 end
 
   it 'raise an error while there is no £ card while touch in' do
+    station = double(:station)
     error_message = "You are broken, not even a £#{Oystercard::MINIMUM_FARE} left"
-    expect { oystercard.touch_in }.to raise_error error_message
+    expect { oystercard.touch_in(station) }.to raise_error error_message
   end
-
 end

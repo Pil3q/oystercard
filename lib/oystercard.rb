@@ -5,13 +5,12 @@ class Oystercard
   MINIMUM_FARE = 1.0
   INITIAL_BALANCE = 0.0
 
-  attr_reader :balance, :in_journey
+  attr_reader :balance, :entry_station
 
   def initialize(balance = INITIAL_BALANCE)
     error_message = "You cannot create a card with more than £#{MAX_BALANCE}"
     raise error_message if balance > MAX_BALANCE
     @balance = balance
-    @in_journey = false
   end
 
   def top_up(money)
@@ -20,15 +19,19 @@ class Oystercard
     @balance += money
   end
 
-  def touch_in
+  def touch_in(station)
     error_message = "You are broken, not even a £#{MINIMUM_FARE} left"
     raise error_message if balance < MINIMUM_FARE
-    @in_journey = true
+    @entry_station = station
   end
 
   def touch_out
-    @in_journey = false
+    @entry_station = nil
     deduct(MINIMUM_FARE)
+  end
+
+  def in_journey?
+    entry_station != nil
   end
 
 private
