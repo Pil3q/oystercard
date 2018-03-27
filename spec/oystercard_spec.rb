@@ -5,6 +5,10 @@ describe Oystercard do
     expect(oystercard.balance).to eq 0
   end
 
+  it 'has an empty journey history on creation' do
+    expect(oystercard.journey_history).to eq []
+  end
+
   it 'tops up the card' do
     subject.top_up(5.5)
     expect(oystercard.balance).to eq 5.5
@@ -28,9 +32,16 @@ describe Oystercard do
   #   oystercard.top_up(10)
   #   expect(oystercard.deduct(5)).to eq 5.0
   # end
-describe 'need to up before' do
+describe 'need to top up before' do
   before do
   oystercard.top_up(5)
+  end
+  it 'check is the journey record after in and out' do
+    entry_station = double(:entry_station)
+    exit_station = double(:exit_station)
+    oystercard.touch_in(entry_station)
+    oystercard.touch_out(exit_station)
+    expect(oystercard.journey_history).to include({"start" => entry_station, "end" => exit_station})
   end
   it 'is in journey once touch in' do
     station = double(:station)
@@ -41,11 +52,12 @@ describe 'need to up before' do
   it 'is not in journey once touch out' do
     station = double(:station)
     oystercard.touch_in(station)
-    oystercard.touch_out
+    oystercard.touch_out(station)
     expect(subject.in_journey?).to eq false
   end
-  it 'charger minimum fare while touch out' do
-    expect{ oystercard.touch_out }.to change{ oystercard.balance }.by -Oystercard::MINIMUM_FARE
+  it 'charge minimum fare while touch out' do
+    station = double(:station)
+    expect{ oystercard.touch_out(station) }.to change{ oystercard.balance }.by -Oystercard::MINIMUM_FARE
   end
   it "should remember touch in station" do
     station = double(:station)
