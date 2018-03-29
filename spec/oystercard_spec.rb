@@ -1,4 +1,6 @@
 require 'oystercard'
+require 'journey'
+require 'journeylog'
 describe Oystercard do
   subject(:oystercard)  { described_class.new }
   it 'has a balance equal to 0 once created' do
@@ -6,7 +8,7 @@ describe Oystercard do
   end
 
   it 'has an empty journey history on creation' do
-    expect(oystercard.journey_history).to eq []
+    expect(oystercard.journeylog.log).to eq []
   end
 
   it 'tops up the card' do
@@ -37,12 +39,12 @@ describe 'need to top up before' do
     exit_station = double(:exit_station)
     oystercard.touch_in(entry_station)
     oystercard.touch_out(exit_station)
-    expect(oystercard.journey_history).to include({:start => entry_station, :end => exit_station})
+    expect(oystercard.journeylog.log).to include({:start => entry_station, :end => exit_station})
   end
   it 'is in journey once touch in' do
     station = double(:station)
     oystercard.touch_in(station)
-    expect(oystercard.journey.single).to include({:start => station})
+    expect(oystercard.journeylog.current_journey).to include({:start => station})
   end
 
   it 'is not in journey once touch out' do
@@ -50,7 +52,7 @@ describe 'need to top up before' do
     oystercard.touch_in(station)
     oystercard.touch_out(station)
     empty = {}
-    expect(subject.journey.single).to eq empty
+    expect(subject.journeylog.current_journey).to eq empty
   end
   it 'charge minimum fare while touch out' do
     station = double(:station)
@@ -60,7 +62,7 @@ describe 'need to top up before' do
   it "should remember touch in station" do
     station = double(:station)
     oystercard.touch_in(station)
-    expect(oystercard.journey.entry_station).to eq station
+    expect(oystercard.journeylog.journey.entry_station).to eq station
   end
 end
 

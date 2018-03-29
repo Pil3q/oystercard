@@ -3,7 +3,6 @@ class Journey
   PENALTY_FARE = 6
   attr_reader :entry_station, :exit_station
   attr_accessor :single
-
   def initialize
   @single = {}
   end
@@ -20,11 +19,8 @@ class Journey
   end
 
   def fare
-    if !complete?
-      PENALTY_FARE
-    else
-      MINIMUM_FARE
-    end
+    return PENALTY_FARE if !complete?
+    return MINIMUM_FARE
   end
 
 private
