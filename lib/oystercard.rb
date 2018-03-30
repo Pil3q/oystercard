@@ -20,12 +20,14 @@ class Oystercard
     raise error_message if balance < MINIMUM_FARE
     deduct(journeylog.fare) if journeylog.current_journey.key?(:start)
     journeylog.start(station)
+    balance
   end
 
   def touch_out(station)
     journeylog.end(station)
     deduct(journeylog.fare)
     journeylog.journey.single = {}
+    balance
   end
 
   def journeys
@@ -40,6 +42,7 @@ class Oystercard
       else
         p 'No exit station'
       end }
+      p "Your balance is #{balance}"
   end
 
   private
