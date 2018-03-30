@@ -35,8 +35,8 @@ describe 'need to top up before' do
   oystercard.top_up(5)
   end
   it 'check is the journey record after in and out' do
-    entry_station = double(:entry_station)
-    exit_station = double(:exit_station)
+    entry_station = double(:entry_station, zone: 1)
+    exit_station = double(:exit_station, zone: 1)
     oystercard.touch_in(entry_station)
     oystercard.touch_out(exit_station)
     expect(oystercard.journeylog.log).to include({:start => entry_station, :end => exit_station})
@@ -48,19 +48,19 @@ describe 'need to top up before' do
   end
 
   it 'is not in journey once touch out' do
-    station = double(:station)
+    station = double(:station, zone: 1)
     oystercard.touch_in(station)
     oystercard.touch_out(station)
     empty = {}
     expect(subject.journeylog.current_journey).to eq empty
   end
   it 'charge minimum fare while touch out' do
-    station = double(:station)
+    station = double(:station, zone: 1)
     oystercard.touch_in(station)
     expect{ oystercard.touch_out(station) }.to change{ oystercard.balance }.by -Oystercard::MINIMUM_FARE
   end
   it "should remember touch in station" do
-    station = double(:station)
+    station = double(:station, zone: 1)
     oystercard.touch_in(station)
     expect(oystercard.journeylog.journey.entry_station).to eq station
   end

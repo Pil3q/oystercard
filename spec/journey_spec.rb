@@ -10,7 +10,7 @@ subject(:journey)  { described_class.new }
     expect(journey.fare).to eq Journey::PENALTY_FARE
   end
   it 'in and out makes the complete journey' do
-    station = double(:station)
+    station = double(:station, zone:1)
     journey.start(station)
     journey.end(station)
     expect(journey.fare).to eq Journey::MINIMUM_FARE

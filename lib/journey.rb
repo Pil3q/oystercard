@@ -20,12 +20,15 @@ class Journey
 
   def fare
     return PENALTY_FARE if !complete?
-    return MINIMUM_FARE
+    return MINIMUM_FARE + zone_fare
   end
 
 private
 
   def complete?
      @single.key?(:start) && @single.key?(:end)
+  end
+  def zone_fare
+    (single[:start].zone - single[:end].zone).abs
   end
 end
