@@ -30,23 +30,21 @@ class Oystercard
 
   def journeys
     journeylog.log.each { |journey|
-        if journey[:start] != nil
-          p "Entry station: #{journey[:start].name}, zone: #{journey[:start].zone}"
-        else
-          p "No entry station"
-        end
-        if journey[:end] != nil
-          p "Exit station: #{journey[:end].name}, zone: #{journey[:end].zone}"
-        else
-          p "No exit station"
-        end
-      }
+      if !journey[:start].nil?
+        p "Entry station: #{journey[:start].name}, zone: #{journey[:start].zone}"
+      else
+        p 'No entry station'
+      end
+      if !journey[:end].nil?
+        p "Exit station: #{journey[:end].name}, zone: #{journey[:end].zone}"
+      else
+        p 'No exit station'
+      end }
   end
 
-private
+  private
 
   def deduct(money)
     @balance -= money
   end
-
 end

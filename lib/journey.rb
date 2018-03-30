@@ -4,7 +4,7 @@ class Journey
   attr_reader :entry_station, :exit_station
   attr_accessor :single
   def initialize
-  @single = {}
+    @single = {}
   end
 
   def start(station)
@@ -19,15 +19,16 @@ class Journey
   end
 
   def fare
-    return PENALTY_FARE if !complete?
-    return MINIMUM_FARE + zone_fare
+    return PENALTY_FARE unless complete?
+    MINIMUM_FARE + zone_fare
   end
 
-private
+  private
 
   def complete?
-     @single.key?(:start) && @single.key?(:end)
+    @single.key?(:start) && @single.key?(:end)
   end
+  
   def zone_fare
     (single[:start].zone - single[:end].zone).abs
   end
